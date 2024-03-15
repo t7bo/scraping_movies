@@ -12,6 +12,10 @@ BOT_NAME = "moviescraper"
 SPIDER_MODULES = ["moviescraper.spiders"]
 NEWSPIDER_MODULE = "moviescraper.spiders"
 
+FEEDS = {
+   'data.json' : {'format': 'json', 'overwrite': True},
+   'data.csv' : {'format': 'csv', 'overwrite': True}
+}
 
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
 #USER_AGENT = "moviescraper (+http://www.yourdomain.com)"

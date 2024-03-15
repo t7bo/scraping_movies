@@ -3,10 +3,10 @@ import scrapy
 class MoviespiderSpider(scrapy.Spider):
     name = "moviespider"
     allowed_domains = ["www.imdb.com"]
-    start_urls = ["https://www.imdb.com/chart/top/?ref_=nv_mv_250"]
+    start_urls = ["https://www.imdb.com/chart/top"]
 
     def parse(self, response):
-        # Première étape : sélectionner chaque block de livre d'une page
+        # Première étape : sélectionner chaque block de film d'une page
         # le mieux serait de sélectionner chaque <a ipc-title-link-wrapper> dirigeant vers la page du film
         # movies = response.css("div.ipc-title")
         movies = response.css("li.ipc-metadata-list-summary-item")
