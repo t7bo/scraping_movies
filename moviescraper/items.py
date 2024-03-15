@@ -5,8 +5,32 @@
 
 import scrapy
 
-
 class MoviescraperItem(scrapy.Item):
     # define the fields for your item here like:
-    # name = scrapy.Field()
+    name = scrapy.Field()
     pass
+
+class MovieItem(scrapy.Item):
+    url = scrapy.Field()
+    title = scrapy.Field()
+    original_title = scrapy.Field()
+    year = scrapy.Field()
+    public = scrapy.Field()
+    screening = scrapy.Field()
+    mark = scrapy.Field()
+    marks_nb = scrapy.Field()
+    popularity = scrapy.Field()
+    category = scrapy.Field()
+    synopsis = scrapy.Field()
+    director = scrapy.Field()
+    
+class SerieItem(scrapy.Item):
+    url = scrapy.Field()
+    title = scrapy.Field()
+    years = scrapy.Field()
+    nb_seasons = scrapy.Field()
+    nb_episodes = scrapy.Field()
+    episode_length = scrapy.Field()
+    synopsis = scrapy.Field()
+    mark = scrapy.Field()
+    marks_nb = scrapy.Field()
