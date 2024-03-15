@@ -23,6 +23,8 @@ class MovieItem(scrapy.Item):
     category = scrapy.Field()
     synopsis = scrapy.Field()
     director = scrapy.Field()
+    budget = scrapy.Field()
+    boxoffice = scrapy.Field()
     
 class SerieItem(scrapy.Item):
     url = scrapy.Field()
