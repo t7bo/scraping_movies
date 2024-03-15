@@ -1,2 +1,3 @@
 scrapy<3
 ipython<9
+scrapy-user-agents<1
