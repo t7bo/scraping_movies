@@ -19,5 +19,8 @@ class MoviespiderSpider(scrapy.Spider):
         yield {
             'url' : response.url,
             'title' : response.xpath('//h1[@data-testid="hero__pageTitle"]//span/text()').get(),
-            'original_title' : response.xpath('//div[@class="sc-d8941411-1 fTeJrK"]/text()').get()
+            'original_title' : response.xpath('//div[@class="sc-d8941411-1 fTeJrK"]/text()').get(),
+            'year' : response.xpath('//section/div[2]/div[1]/ul/li[1]/a/text()').get(),
+            'public' : response.xpath('//section/div[2]/div[1]/ul/li[2]/a/text()').get(),
+            'screening' : response.xpath('//section/div[2]/div[1]/ul/li[3]/text()').get(),
         }
