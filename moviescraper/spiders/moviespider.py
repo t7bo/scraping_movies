@@ -11,6 +11,13 @@ class MoviespiderSpider(scrapy.Spider):
         # movies = response.css("div.ipc-title")
         movies = response.css("li.ipc-metadata-list-summary-item")
         for movie in movies:
-            yield {
-                'url' : movie.css('div.ipc-title a.ipc-title-link-wrapper::attr(href)').get()
-            }
+            relative_url = movie.css('div.ipc-title a.ipc-title-link-wrapper::attr(href)').get()
+            movie_url = 'https://www.imdb.com' + relative_url
+            yield response.follow(movie_url, callback=self.parsemoviepage)
+
+    def parsemoviepage(self, response):
+        yield {
+            'url' : response.url,
+            'title' : response.xpath('//h1[@data-testid="hero__pageTitle"]//span/text()').get(),
+            'original_title' : response.xpath('//div[@class="sc-d8941411-1 fTeJrK"]/text()').get()
+        }
