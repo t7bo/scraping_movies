@@ -8,6 +8,9 @@
 from itemadapter import ItemAdapter
 import sqlite3
 
+
+# MOVIES
+
 class MoviescraperPipeline:
     def __init__(self) -> None:
         # create database
@@ -27,21 +30,83 @@ class MoviescraperPipeline:
                              mark TEXT,
                              marks_nb TEXT,
                              popularity TEXT,
-                             category TEXT,
+                             category LIST,
                              synopsis TEXT,
                              director TEXT,
                              budget TEXT,
-                             boxoffice TEXT
+                             boxoffice TEXT,
+                             country LIST,
+                             casting TEXT
                              
-                         )
-                         """)
+                             )
+                        """)
         
-    
+
     def process_item(self, item, spider):
         adapter = ItemAdapter(item)
+
+        field_names = adapter.field_names()
+
+        for field_name in field_names:
+
+            if field_name == 'url':
+                pass
+
+            # ADD A CAPITAL LETTER TO EACH WORD COMPOSING TITLES & ORIGINAL TITLES
+            # CAREFUL WITH NAN
+            elif field_name == 'title':
+
+                title = adapter.get('title')
+                original_title = adapter.get('original_title')
+
+                if title is None:
+                    pass
+                else:
+                    title = title.title()
+                    adapter['title'] = title
+
+            elif field_name == 'original_title':
+
+                original_title = adapter.get('original_title')
+
+                if original_title is not None:
+                    if "Titre original\xa0: " in original_title:
+                        original_title = original_title[17:].title() # supprimer "Titre Original :"
+                    adapter['original_title'] = original_title.title()
+
+            
+            elif field_name == 'year':
+
+                string = adapter.get('year')
+
+                if string.isdigit() != True:
+                    # remove str characters
+                    # then, convert to int
+                    for char in string:
+                        if char.isdigit() == False:
+                            string = string.remove(char)
+                    adapter['year'] = int(string)
+                else:
+                    string = int(string)
+                    adapter['year'] = string
+
+
+            elif field_name == 'public':
+
+                public = adapter.get('public')
+
+                if public is None:
+                    adapter['public'] = 'NaN'
+
+                if public.isdigit() == True:
+                    public = "-" + public
+                    adapter['public'] = public
+                else:
+                    adapter['public'] = public
+
         
         self.cur.execute("""
-                         INSERT INTO moviesdb (url, title, original_title, year, public, screening, mark, marks_nb, popularity, category, synopsis, director, budget, boxoffice) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                         INSERT INTO moviesdb (url, title, original_title, year, public, screening, mark, marks_nb, popularity, category, synopsis, director, budget, boxoffice, country, casting) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
                          """,
                          (
                             adapter["url"],
@@ -58,6 +123,8 @@ class MoviescraperPipeline:
                             adapter["director"],
                             adapter["budget"],
                             adapter["boxoffice"],
+                            adapter["country"],
+                            adapter["casting"],
                          ))
         
         # execute insert of data into the database
@@ -71,6 +138,16 @@ class MoviescraperPipeline:
         self.con.close()
     
     
+
+
+
+
+
+
+
+
+# SERIES
+            
 class SeriescraperPipeline:
     def __init__(self) -> None:
         # create database
