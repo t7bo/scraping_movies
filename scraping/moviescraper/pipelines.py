@@ -99,13 +99,23 @@ class MoviescraperPipeline:
 
                 if public is None:
                     adapter['public'] = 'NaN'
-
-                if public.isdigit() == True:
-                    public = "-" + public
-                    adapter['public'] = public
                 else:
                     adapter['public'] = public
 
+            
+            elif field_name == "screening":
+
+                screening = adapter.get('screening')
+                screen_split = screening.split(' ')
+                hours = ''.join(filter(str.isdigit, screen_split[0]))
+                minutes = ''.join(filter(str.isdigit, screen_split[1]))
+                time = 0
+
+                time = int(hours) * 60
+                time = int(time) + int(minutes)
+                adapter['screening'] = time
+
+                        
         
         self.cur.execute("""
                          INSERT INTO movies (url, title, original_title, year, public, screening, mark, marks_nb, popularity, category, synopsis, director, budget, boxoffice, country, casting) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
