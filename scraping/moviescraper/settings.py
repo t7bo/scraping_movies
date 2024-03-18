@@ -12,12 +12,12 @@ BOT_NAME = "moviescraper"
 SPIDER_MODULES = ["moviescraper.spiders"]
 NEWSPIDER_MODULE = "moviescraper.spiders"
 
-# FEEDS = {
+FEEDS = {
 #    'moviesdata.json' : {'format': 'json', 'overwrite': True},
-#    'moviesdata.csv' : {'format': 'csv', 'overwrite': True},
+   # 'moviesdata.csv' : {'format': 'csv', 'overwrite': True},
 #    'seriesdata.json' : {'format': 'json', 'overwrite': True},
 #    'seriesdata.csv' : {'format': 'csv', 'overwrite': True}
-# }
+}
 
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
 #USER_AGENT = "moviescraper (+http://www.yourdomain.com)"
@@ -45,7 +45,8 @@ ROBOTSTXT_OBEY = True
 # Override the default request headers:
 DEFAULT_REQUEST_HEADERS = {
    "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
-   "Accept-Language": "fr",
+   # "Accept-Language": "fr",
+   'Accept-Language' : 'en-US,en;q=0.9'
 }
 
 # Enable or disable spider middlewares
