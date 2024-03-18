@@ -14,12 +14,12 @@ import sqlite3
 class MoviescraperPipeline:
     def __init__(self) -> None:
         # create database
-        self.con = sqlite3.connect('moviesdb.db')
+        self.con = sqlite3.connect('../data/database/imdb.db')
         # create cursorto execute commands
         self.cur = self.con.cursor()
         # create table
         self.cur.execute("""
-                         CREATE TABLE IF NOT EXISTS moviesdb(
+                         CREATE TABLE IF NOT EXISTS movies(
                              
                              url TEXT,
                              title TEXT,
@@ -106,7 +106,7 @@ class MoviescraperPipeline:
 
         
         self.cur.execute("""
-                         INSERT INTO moviesdb (url, title, original_title, year, public, screening, mark, marks_nb, popularity, category, synopsis, director, budget, boxoffice, country, casting) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                         INSERT INTO movies (url, title, original_title, year, public, screening, mark, marks_nb, popularity, category, synopsis, director, budget, boxoffice, country, casting) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
                          """,
                          (
                             adapter["url"],
@@ -151,12 +151,12 @@ class MoviescraperPipeline:
 class SeriescraperPipeline:
     def __init__(self) -> None:
         # create database
-        self.con = sqlite3.connect('seriesdb.db')
+        self.con = sqlite3.connect('../data/database/imdb.db')
         # create cursorto execute commands
         self.cur = self.con.cursor()
         # create table
         self.cur.execute("""
-                         CREATE TABLE IF NOT EXISTS seriesdb(
+                         CREATE TABLE IF NOT EXISTS series(
                              url TEXT,
                              title TEXT,
                              years TEXT,
@@ -174,7 +174,7 @@ class SeriescraperPipeline:
         adapter = ItemAdapter(item)
         
         self.cur.execute("""
-                         INSERT INTO seriesdb (url, title, years, nb_seasons, nb_episodes, episode_length, synopsis, mark, marks_nb) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+                         INSERT INTO series (url, title, years, nb_seasons, nb_episodes, episode_length, synopsis, mark, marks_nb) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
                          """,
                          (
                              
