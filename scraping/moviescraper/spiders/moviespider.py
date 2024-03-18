@@ -1,5 +1,6 @@
 import scrapy
 from moviescraper.items import MovieItem
+import json
 
 class MoviespiderSpider(scrapy.Spider):
     name = "moviespider"
@@ -30,12 +31,11 @@ class MoviespiderSpider(scrapy.Spider):
         movie_item['mark'] = response.xpath('//section/div[2]/div[2]/div/div[1]/a/span/div/div[2]/div[1]/span/text()').get()
         movie_item['marks_nb'] = response.xpath('//section/div[2]/div[2]/div/div[1]/a/span/div/div[2]/div[3]/text()').get()
         movie_item['popularity'] = response.xpath('//div[@data-testid="hero-rating-bar__popularity__score"]/text()').get()
-        movie_item['category'] = response.xpath('//section/div[3]/div[2]/div[1]/section/div[1]/div[2]/a/span/text()').get()
+        movie_item['category'] = json.dumps(response.xpath('//section/div[3]/div[2]/div[1]/section/div[1]/div[2]/a/span/text()').getall())
         movie_item['synopsis'] = response.xpath('//span[@data-testid="plot-xl"]/text()').get()
         movie_item['director'] = response.xpath('//section/div[3]/div[2]/div[1]/section/div[2]/div/ul/li[1]/div/ul/li/a/text()').get()
-            # 'casting' : list(response.xpath('//section/div[3]/div[2]/div[1]/section/div[2]/div/ul/li[3]/div/ul//following-sibling::li[0]//a/text()').get(),
-            #                  response.xpath('//section/div[3]/div[2]/div[1]/section/div[2]/div/ul/li[3]/div/ul//following-sibling::li[1]//a/text()').get(),
-            #                  response.xpath('//section/div[3]/div[2]/div[1]/section/div[3]/div/ul/li[3]/div/ul//following-sibling::li[2]//a/text()').get()),
-        movie_item['budget'] = response.xpath('//main/div/section[1]/div/section/div/div[1]/section[12]/div[2]/ul/li[1]/div/ul/li/span/text()').get()
-        movie_item['boxoffice'] = response.xpath('//main/div/section[1]/div/section/div/div[1]/section[12]/div[2]/ul/li[4]/div/ul/li/span/text()').get()
+        movie_item['budget'] = response.xpath('//li[@data-testid="title-boxoffice-budget"]/div/ul/li[@role="presentation"]/span/text()').get()
+        movie_item['boxoffice'] = response.xpath('//li[@data-testid="title-boxoffice-cumulativeworldwidegross"]/div/ul/li/span/text()').get()
+        movie_item['country'] = json.dumps(response.xpath('//section[@data-testid="Details"]/div[2]/ul/li[2]/div/ul/li/a/text()').getall())
+        movie_item['casting'] = json.dumps(response.xpath('//div[@role="presentation"]/ul[@role="presentation"]/li[3]/div[@class="ipc-metadata-list-item__content-container"]/ul[@role="presentation"]/li[@role="presentation"]/a/text()').getall())
         yield movie_item
