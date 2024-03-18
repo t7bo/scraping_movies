@@ -10,6 +10,11 @@ class MoviespiderSpider(scrapy.Spider):
         'ITEM_PIPELINES': {"moviescraper.pipelines.MoviescraperPipeline": 300},
     }
 
+    # HEADERS = {
+    #     'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3',
+    #     'Accept-Language' : 'en-US,en;q=0.9'
+    #     }
+
     def parse(self, response):
         # Première étape : sélectionner chaque block de film d'une page
         # le mieux serait de sélectionner chaque <a ipc-title-link-wrapper> dirigeant vers la page du film
