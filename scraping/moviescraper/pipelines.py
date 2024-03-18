@@ -27,8 +27,8 @@ class MoviescraperPipeline:
                              year TEXT,
                              public TEXT,
                              screening TEXT,
-                             mark TEXT,
-                             marks_nb TEXT,
+                             mark REAL,
+                             marks_nb INTEGER,
                              popularity TEXT,
                              category LIST,
                              synopsis TEXT,
@@ -115,7 +115,26 @@ class MoviescraperPipeline:
                 time = int(time) + int(minutes)
                 adapter['screening'] = time
 
-                        
+
+            elif field_name == "mark":
+                mark = adapter.get('mark')
+                if mark is not None:
+                    mark = float(mark)
+                    adapter['mark'] = mark
+                
+            elif field_name == "marks_nb":
+                marks_nb = adapter.get('marks_nb')
+                if marks_nb is not None:
+                    if "M" in marks_nb:
+                        marks_nb = float(''.join(filter(str.isdigit, marks_nb)))
+                        marks_nb = marks_nb * 1000000
+                    elif "K" in marks_nb:
+                        marks_nb = float(''.join(filter(str.isdigit, marks_nb)))
+                        marks_nb = marks_nb * 1000
+
+                marks_nb = int(marks_nb)
+                adapter['marks_nb'] = marks_nb
+
         
         self.cur.execute("""
                          INSERT INTO movies (url, title, original_title, year, public, screening, mark, marks_nb, popularity, category, synopsis, director, budget, boxoffice, country, casting) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
