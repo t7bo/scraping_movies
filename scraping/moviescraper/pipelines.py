@@ -57,7 +57,6 @@ class MoviescraperPipeline:
             elif field_name == 'title':
 
                 title = adapter.get('title')
-                original_title = adapter.get('original_title')
 
                 if title is None:
                     pass
@@ -70,9 +69,12 @@ class MoviescraperPipeline:
                 original_title = adapter.get('original_title')
 
                 if original_title is not None:
-                    if "Titre original\xa0: " in original_title:
-                        original_title = original_title[17:].title() # supprimer "Titre Original :"
-                    adapter['original_title'] = original_title.title()
+                    original_title = original_title[17:]
+                    original_title = original_title.title()
+                else:
+                    pass
+            
+                adapter['original_title'] = original_title
 
             
             elif field_name == 'year':
