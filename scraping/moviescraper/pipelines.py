@@ -135,6 +135,12 @@ class MoviescraperPipeline:
                 marks_nb = int(marks_nb)
                 adapter['marks_nb'] = marks_nb
 
+            elif field_name == "boxoffice":
+                boxoffice = adapter.get('boxoffice')
+                if boxoffice.isdigit() == False:
+                    boxoffice = ''.join(filter(str.isdigit, boxoffice))
+                adapter['boxoffice'] = int(boxoffice)
+
         
         self.cur.execute("""
                          INSERT INTO movies (url, title, original_title, year, public, screening, mark, marks_nb, popularity, category, synopsis, director, budget, boxoffice, country, casting) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
