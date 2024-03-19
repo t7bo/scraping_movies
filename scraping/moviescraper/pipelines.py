@@ -268,6 +268,62 @@ class SeriescraperPipeline:
     
     def process_item(self, item, spider):
         adapter = ItemAdapter(item)
+
+        field_names = adapter.field_names()
+
+        for field_name in field_names:
+
+            if field_name == 'url':
+                pass
+
+            elif field_name == 'title':
+                pass
+
+            elif field_name == "nb_seasons":
+                years = adapter.get('years')
+                nb_seasons = adapter.get('nb_seasons')
+                if '–' not in years and nb_seasons is None:
+                    nb_seasons = 1
+                    adapter['nb_seasons'] = nb_seasons
+
+            elif field_name == 'nb_seasons':
+                nb_seasons = adapter.get('nb_seasons')
+                if nb_seasons is not None:
+                    adapter['nb_seasons'] = int(nb_seasons)
+
+            elif field_name == "nb_episodes":
+                nb_episodes = adapter.get('nb_episodes')
+                if nb_episodes is not None:
+                    adapter['nb_episodes'] = int(nb_episodes)
+
+            elif field_name == "episode_length":
+                episode_length = adapter.get('episode_length')
+                nb_episodes = adapter.get('nb_episodes')
+                if episode_length is not None:
+                    if 'h' in episode_length:
+                        split = episode_length.split(' ')
+                        hours = ''.join(filter(str.isdigit, split[0]))
+                        minutes = ''.join(filter(str.isdigit, split[1]))
+                        episode_length = 0
+                        episode_length = round((((int(hours) * 60) + int(minutes)) / int(nb_episodes)), 2)
+                    else:
+                        episode_length = ''.join(filter(str.isdigit, episode_length))
+
+                adapter["episode_length"] = episode_length
+
+            
+            elif field_name == "mark":
+                pass
+
+            elif field_name == "marks_nb":
+                marks_nb = adapter.get('marks_nb')
+                if marks_nb is not None:
+                    if "M" in marks_nb:
+                        marks_nb = int(''.join(filter(str.isdigit, marks_nb))) * 1000000
+                    elif "K" in marks_nb:
+                        marks_nb = int(''.join(filter(str.isdigit, marks_nb))) * 1000
+                    adapter["marks_nb"] = marks_nb
+
         
         self.cur.execute("""
                          INSERT INTO series (url, title, years, nb_seasons, nb_episodes, episode_length, synopsis, mark, marks_nb) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
