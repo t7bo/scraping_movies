@@ -1,3 +1,6 @@
 scrapy<3
 ipython<9
 itemadapter
+# In order to make SQL requests within jupyter notebooks
+jupyter
+ipython-sql
