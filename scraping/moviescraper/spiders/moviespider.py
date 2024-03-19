@@ -42,5 +42,5 @@ class MoviespiderSpider(scrapy.Spider):
         movie_item['boxoffice'] = response.xpath('//li[@data-testid="title-boxoffice-cumulativeworldwidegross"]/div/ul/li/span/text()').get()
         movie_item['country'] = response.xpath('//section[@data-testid="Details"]/div[2]/ul/li[2]/div/ul/li/a/text()').getall()
         movie_item['casting'] = response.xpath('//div[@data-testid="shoveler-items-container"]//div[@data-testid="title-cast-item"]//div[2]/a/text()').getall()
-        movie_item['poster'] = response.css('img.ipc-image::attr(src)').get()
+        movie_item['poster'] = response.css('img.ipc-image::attr(srcset)').get()
         yield movie_item

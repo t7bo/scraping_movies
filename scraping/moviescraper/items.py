@@ -27,6 +27,7 @@ class MovieItem(scrapy.Item):
     country = scrapy.Field()
     casting = scrapy.Field()
     poster = scrapy.Field()
+    imdb_id = scrapy.Field()
     
 class SerieItem(scrapy.Item):
     url = scrapy.Field()

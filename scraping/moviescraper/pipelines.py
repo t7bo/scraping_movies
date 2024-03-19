@@ -37,7 +37,8 @@ class MoviescraperPipeline:
                              boxoffice INTEGER,
                              country TEXT,
                              casting TEXT,
-                             poster URL
+                             poster URL,
+                             imdb_id INTEGER
                              
                              )
                         """)
@@ -193,8 +194,14 @@ class MoviescraperPipeline:
                     casting = casting.replace("'", "").replace("[", "").replace("]", "")
                 adapter['casting'] = casting
 
+            elif field_name == 'imdb_id':
+                imdb_id = adapter.get('url')
+                if imdb_id is not None:
+                    imdb_id = imdb_id.split('/')[-2]
+                adapter['imdb_id'] = imdb_id
+
         self.cur.execute("""
-                         INSERT INTO movies (url, title, original_title, year, public, screening, mark, marks_nb, category, synopsis, director, budget, boxoffice, country, casting, poster) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                         INSERT INTO movies (url, title, original_title, year, public, screening, mark, marks_nb, category, synopsis, director, budget, boxoffice, country, casting, poster, imdb_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
                          """,
                          (
                             adapter["url"],
@@ -212,7 +219,8 @@ class MoviescraperPipeline:
                             adapter["boxoffice"],
                             adapter["country"],
                             adapter["casting"],
-                            adapter["poster"]
+                            adapter["poster"],
+                            adapter['imdb_id']
                          ))
         
         # execute insert of data into the database
