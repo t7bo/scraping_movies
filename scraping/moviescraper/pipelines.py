@@ -34,9 +34,10 @@ class MoviescraperPipeline:
                              synopsis TEXT,
                              director TEXT,
                              budget INTEGER,
-                             boxoffice TEXT,
+                             boxoffice INTEGER,
                              country TEXT,
-                             casting TEXT
+                             casting TEXT,
+                             poster URL
                              
                              )
                         """)
@@ -146,25 +147,25 @@ class MoviescraperPipeline:
                 budget = adapter.get('budget')
                 if budget is not None:
                     if budget[0] == '¥':
-                        budget = int(''.join(filter(str.isdigit, budget))) / 150
+                        budget = int(''.join(filter(str.isdigit, budget)) / 150)
                     elif budget[0] == '₩':
-                        budget = int(''.join(filter(str.isdigit, budget))) * 0.00075
+                        budget = int(''.join(filter(str.isdigit, budget)) * 0.00075)
                     elif budget[0] == '€':
-                        budget = int(''.join(filter(str.isdigit, budget))) * 1.09
+                        budget = int(''.join(filter(str.isdigit, budget)) * 1.09)
                     elif budget[0] == 'A':
-                        budget = int(''.join(filter(str.isdigit, budget))) * 0.65
+                        budget = int(''.join(filter(str.isdigit, budget)) * 0.65)
                     elif budget[0] == '£':
-                        budget = int(''.join(filter(str.isdigit, budget))) * 1.27
+                        budget = int(''.join(filter(str.isdigit, budget)) * 1.27)
                     elif budget[0] == '₹':
-                        budget = int(''.join(filter(str.isdigit, budget))) * 0.012
+                        budget = int(''.join(filter(str.isdigit, budget)) * 0.012)
                     elif budget[:2] == 'DE':
-                        budget = int(''.join(filter(str.isdigit, budget))) * 0.55494846
+                        budget = int(''.join(filter(str.isdigit, budget)) * 0.55494846)
                     elif budget[:2] == 'DK':
-                        budget = int(''.join(filter(str.isdigit, budget))) * 0.15
+                        budget = int(''.join(filter(str.isdigit, budget)) * 0.15)
                     elif budget[0] == "F":
-                        budget = int(''.join(filter(str.isdigit, budget))) * 0.16
+                        budget = int(''.join(filter(str.isdigit, budget)) * 0.16)
                     elif budget[0] == "R":
-                        budget = int(''.join(filter(str.isdigit, budget))) * 0.2
+                        budget = int(''.join(filter(str.isdigit, budget)) * 0.2)
                     else:
                         budget = int(''.join(filter(str.isdigit, budget)))
                 adapter['budget'] = budget
@@ -193,7 +194,7 @@ class MoviescraperPipeline:
                 adapter['casting'] = casting
 
         self.cur.execute("""
-                         INSERT INTO movies (url, title, original_title, year, public, screening, mark, marks_nb, category, synopsis, director, budget, boxoffice, country, casting) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                         INSERT INTO movies (url, title, original_title, year, public, screening, mark, marks_nb, category, synopsis, director, budget, boxoffice, country, casting, poster) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
                          """,
                          (
                             adapter["url"],
@@ -211,6 +212,7 @@ class MoviescraperPipeline:
                             adapter["boxoffice"],
                             adapter["country"],
                             adapter["casting"],
+                            adapter["poster"]
                          ))
         
         # execute insert of data into the database
