@@ -19,7 +19,6 @@ class MovieItem(scrapy.Item):
     screening = scrapy.Field()
     mark = scrapy.Field()
     marks_nb = scrapy.Field()
-    popularity = scrapy.Field()
     category = scrapy.Field()
     synopsis = scrapy.Field()
     director = scrapy.Field()

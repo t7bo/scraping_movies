@@ -21,6 +21,7 @@ class MoviescraperPipeline:
         self.cur.execute("""
                          CREATE TABLE IF NOT EXISTS movies(
                              
+                             id INTEGER PRIMARY KEY AUTOINCREMENT,
                              url TEXT,
                              title TEXT,
                              original_title TEXT,
@@ -29,13 +30,12 @@ class MoviescraperPipeline:
                              screening TEXT,
                              mark REAL,
                              marks_nb INTEGER,
-                             popularity TEXT,
-                             category LIST,
+                             category TEXT,
                              synopsis TEXT,
                              director TEXT,
-                             budget TEXT,
+                             budget INTEGER,
                              boxoffice TEXT,
-                             country LIST,
+                             country TEXT,
                              casting TEXT
                              
                              )
@@ -135,15 +135,65 @@ class MoviescraperPipeline:
                 marks_nb = int(marks_nb)
                 adapter['marks_nb'] = marks_nb
 
+
             elif field_name == "boxoffice":
                 boxoffice = adapter.get('boxoffice')
                 if boxoffice.isdigit() == False:
                     boxoffice = ''.join(filter(str.isdigit, boxoffice))
                 adapter['boxoffice'] = int(boxoffice)
 
-        
+            elif field_name == "budget":
+                budget = adapter.get('budget')
+                if budget is not None:
+                    if budget[0] == '¥':
+                        budget = int(''.join(filter(str.isdigit, budget))) / 150
+                    elif budget[0] == '₩':
+                        budget = int(''.join(filter(str.isdigit, budget))) * 0.00075
+                    elif budget[0] == '€':
+                        budget = int(''.join(filter(str.isdigit, budget))) * 1.09
+                    elif budget[0] == 'A':
+                        budget = int(''.join(filter(str.isdigit, budget))) * 0.65
+                    elif budget[0] == '£':
+                        budget = int(''.join(filter(str.isdigit, budget))) * 1.27
+                    elif budget[0] == '₹':
+                        budget = int(''.join(filter(str.isdigit, budget))) * 0.012
+                    elif budget[:2] == 'DE':
+                        budget = int(''.join(filter(str.isdigit, budget))) * 0.55494846
+                    elif budget[:2] == 'DK':
+                        budget = int(''.join(filter(str.isdigit, budget))) * 0.15
+                    elif budget[0] == "F":
+                        budget = int(''.join(filter(str.isdigit, budget))) * 0.16
+                    elif budget[0] == "R":
+                        budget = int(''.join(filter(str.isdigit, budget))) * 0.2
+                    else:
+                        budget = int(''.join(filter(str.isdigit, budget)))
+                adapter['budget'] = budget
+
+            
+            elif field_name == "category":
+                category = adapter.get('category')
+                if category is not None:
+                    category = ', '.join(category)
+                    category = category.replace("'", "").replace("[", "").replace("]", "")
+                adapter['category'] = str(category)
+            
+            elif field_name == "country":
+                country = adapter.get('country')
+                if country is not None:
+                    country = ', '.join(country)
+                    country = country.replace("'", "").replace("[", "").replace("]", "")
+                adapter['country'] = str(country)
+
+            elif field_name == "casting":
+                casting = adapter.get('casting')
+                if casting is not None:
+                    casting = set(casting)
+                    casting = ', '.join(casting)
+                    casting = casting.replace("'", "").replace("[", "").replace("]", "")
+                adapter['casting'] = casting
+
         self.cur.execute("""
-                         INSERT INTO movies (url, title, original_title, year, public, screening, mark, marks_nb, popularity, category, synopsis, director, budget, boxoffice, country, casting) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                         INSERT INTO movies (url, title, original_title, year, public, screening, mark, marks_nb, category, synopsis, director, budget, boxoffice, country, casting) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
                          """,
                          (
                             adapter["url"],
@@ -154,7 +204,6 @@ class MoviescraperPipeline:
                             adapter["screening"],
                             adapter["mark"],
                             adapter["marks_nb"],
-                            adapter["popularity"],
                             adapter["category"],
                             adapter["synopsis"],
                             adapter["director"],
