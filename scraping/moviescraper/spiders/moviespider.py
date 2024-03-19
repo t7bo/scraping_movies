@@ -1,6 +1,5 @@
 import scrapy
 from moviescraper.items import MovieItem
-import json
 
 class MoviespiderSpider(scrapy.Spider):
     name = "moviespider"
@@ -10,15 +9,7 @@ class MoviespiderSpider(scrapy.Spider):
         'ITEM_PIPELINES': {"moviescraper.pipelines.MoviescraperPipeline": 300},
     }
 
-    # HEADERS = {
-    #     'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3',
-    #     'Accept-Language' : 'en-US,en;q=0.9'
-    #     }
-
     def parse(self, response):
-        # Première étape : sélectionner chaque block de film d'une page
-        # le mieux serait de sélectionner chaque <a ipc-title-link-wrapper> dirigeant vers la page du film
-        # movies = response.css("div.ipc-title")
         movies = response.css("li.ipc-metadata-list-summary-item")
         for movie in movies:
             relative_url = movie.css('div.ipc-title a.ipc-title-link-wrapper::attr(href)').get()
@@ -42,5 +33,14 @@ class MoviespiderSpider(scrapy.Spider):
         movie_item['boxoffice'] = response.xpath('//li[@data-testid="title-boxoffice-cumulativeworldwidegross"]/div/ul/li/span/text()').get()
         movie_item['country'] = response.xpath('//section[@data-testid="Details"]/div[2]/ul/li[2]/div/ul/li/a/text()').getall()
         movie_item['casting'] = response.xpath('//div[@data-testid="shoveler-items-container"]//div[@data-testid="title-cast-item"]//div[2]/a/text()').getall()
-        movie_item['poster'] = response.css('img.ipc-image::attr(srcset)').get()
+        
+        poster_url = response.css('a.ipc-lockup-overlay::attr(href)').get()
+        if poster_url:
+            yield response.follow('https://www.imdb.com' + poster_url, callback=self.parse_poster_page, meta={'movie_item': movie_item})
+        else:
+            yield movie_item
+
+    def parse_poster_page(self, response):
+        movie_item = response.meta['movie_item']
+        movie_item['poster'] = response.xpath('//img[@class="sc-7c0a9e7c-0 eWmrns"]/@src').get()
         yield movie_item
