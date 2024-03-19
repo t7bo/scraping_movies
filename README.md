@@ -12,5 +12,5 @@ L'objectif de ce projet est de collecter des données sur les films et les séri
 
 ## Structure du Projet
 
-- `data`: Le dossier contenant les données scrappées sauvegardées sous format CSV ainsi que les bases de données créées.
-- `moviescraper`: Dossier principal contenant les spiders qui ont permis de scrapper les données.
+- `data`: Le dossier contenant les données scrappées sauvegardées sous format CSV ainsi que la base de donnée et un notebook de requêtes SQL.
+- `scraping`: Dossier principal contenant les spiders qui ont permis de scrapper les données, les pipelines qui ont permis de les nettoyer, etc.
