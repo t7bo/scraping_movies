@@ -1,5 +1,7 @@
 import scrapy
 from moviescraper.items import MovieItem
+from loguru import logger 
+
 
 class MoviespiderSpider(scrapy.Spider):
     name = "moviespider"
@@ -16,6 +18,7 @@ class MoviespiderSpider(scrapy.Spider):
             movie_url = 'https://www.imdb.com' + relative_url
             yield response.follow(movie_url, callback=self.parsemoviepage)
 
+    @logger.catch
     def parsemoviepage(self, response):
         movie_item = MovieItem()
         movie_item["url"] = response.url
@@ -39,7 +42,8 @@ class MoviespiderSpider(scrapy.Spider):
             yield response.follow('https://www.imdb.com' + poster_url, callback=self.parse_poster_page, meta={'movie_item': movie_item})
         else:
             yield movie_item
-
+            
+    @logger.catch
     def parse_poster_page(self, response):
         movie_item = response.meta['movie_item']
         movie_item['poster'] = response.xpath('//img[@class="sc-7c0a9e7c-0 eWmrns"]/@src').get()

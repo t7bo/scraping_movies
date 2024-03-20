@@ -7,7 +7,7 @@
 # useful for handling different item types with a single interface
 from itemadapter import ItemAdapter
 import sqlite3
-
+from loguru import logger
 
 # MOVIES
 
@@ -43,7 +43,7 @@ class MoviescraperPipeline:
                              )
                         """)
         
-
+    @logger.catch #permet de colorer les logs pour + de visibilité
     def process_item(self, item, spider):
         adapter = ItemAdapter(item)
 
@@ -60,9 +60,7 @@ class MoviescraperPipeline:
 
                 title = adapter.get('title')
 
-                if title is None:
-                    pass
-                else:
+                if title is not None:
                     title = title.title()
                     adapter['title'] = title
 
@@ -73,8 +71,6 @@ class MoviescraperPipeline:
                 if original_title is not None:
                     original_title = original_title[17:]
                     original_title = original_title.title()
-                else:
-                    pass
             
                 adapter['original_title'] = original_title
 
@@ -84,8 +80,6 @@ class MoviescraperPipeline:
                 string = adapter.get('year')
 
                 if string.isdigit() != True:
-                    # remove str characters
-                    # then, convert to int
                     for char in string:
                         if char.isdigit() == False:
                             string = string.remove(char)
@@ -99,30 +93,34 @@ class MoviescraperPipeline:
 
                 public = adapter.get('public')
 
-                if public is None:
-                    adapter['public'] = 'NaN'
-                else:
+                if public is not None:
                     adapter['public'] = public
 
             
             elif field_name == "screening":
 
                 screening = adapter.get('screening')
-                screen_split = screening.split(' ')
-                hours = ''.join(filter(str.isdigit, screen_split[0]))
-                minutes = ''.join(filter(str.isdigit, screen_split[1]))
-                time = 0
 
-                time = int(hours) * 60
-                time = int(time) + int(minutes)
-                adapter['screening'] = time
+                if screening is not None:
+                    if "h" in screening:
+                        screen_split = screening.split(' ')
+                        hours = ''.join(filter(str.isdigit, screen_split[0]))
+                        time = int(hours) * 60
+                        if "m" in screen_split:
+                            minutes = ''.join(filter(str.isdigit, screen_split[1]))
+                            time = int(hours) * 60
+                            time = int(time) + int(minutes)
+                        adapter['screening'] = time
+                    else:
+                        screen = int(''.join(filter(str.isdigit, screening)))
+                        adapter['screening'] = screen
+
 
 
             elif field_name == "mark":
                 mark = adapter.get('mark')
                 if mark is not None:
-                    mark = float(mark)
-                    adapter['mark'] = mark
+                    adapter['mark'] = float(mark)
                 
             elif field_name == "marks_nb":
                 marks_nb = adapter.get('marks_nb')
@@ -133,9 +131,7 @@ class MoviescraperPipeline:
                     elif "K" in marks_nb:
                         marks_nb = float(''.join(filter(str.isdigit, marks_nb)))
                         marks_nb = marks_nb * 1000
-
-                marks_nb = int(marks_nb)
-                adapter['marks_nb'] = marks_nb
+                adapter['marks_nb'] = int(marks_nb)
 
 
             elif field_name == "boxoffice":
