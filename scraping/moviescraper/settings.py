@@ -72,7 +72,8 @@ DOWNLOADER_MIDDLEWARES = {
 # See https://docs.scrapy.org/en/latest/topics/item-pipeline.html
 ITEM_PIPELINES = {
    "moviescraper.pipelines.MoviescraperPipeline": 100,
-   "moviescraper.pipelines.SeriescraperPipeline":100,
+   "moviescraper.pipelines.CategoriesPipeline": 200,
+   "moviescraper.pipelines.SeriescraperPipeline": 300,
 }
 
 # Enable and configure the AutoThrottle extension (disabled by default)

@@ -8,7 +8,8 @@ class MoviespiderSpider(scrapy.Spider):
     allowed_domains = ["www.imdb.com"]
     start_urls = ["https://www.imdb.com/chart/top"]
     custom_settings = {
-        'ITEM_PIPELINES': {"moviescraper.pipelines.MoviescraperPipeline": 300},
+        'ITEM_PIPELINES': {"moviescraper.pipelines.MoviescraperPipeline": 100,
+                           "moviescraper.pipelines.CategoriesPipeline": 200}
     }
 
     def parse(self, response):

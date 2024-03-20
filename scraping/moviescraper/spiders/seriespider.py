@@ -6,7 +6,7 @@ class SeriespiderSpider(scrapy.Spider):
     allowed_domains = ["www.imdb.com"]
     start_urls = ["https://www.imdb.com/chart/toptv/"]
     custom_settings = {
-        'ITEM_PIPELINES': {"moviescraper.pipelines.SeriescraperPipeline": 300},
+        'ITEM_PIPELINES': {"moviescraper.pipelines.SeriescraperPipeline": 200}
     }
 
     def parse(self, response):
