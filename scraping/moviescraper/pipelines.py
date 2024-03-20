@@ -27,7 +27,7 @@ class MoviescraperPipeline:
                              original_title TEXT,
                              year TEXT,
                              public TEXT,
-                             screening TEXT,
+                             screening INTEGER,
                              mark REAL,
                              marks_nb INTEGER,
                              category TEXT,
