@@ -1,16 +1,16 @@
-# Scraping de Films et Séries depuis IMDb
+# Scraping Movies and TV Shows
 
-## Objectif
+## Objective
 
-L'objectif de ce projet est de collecter des données sur les films et les séries à partir du site IMDb en utilisant des techniques de scraping avec Python. Les informations collectées peuvent inclure les titres, les notes, les acteurs principaux, les genres, les années de sortie, etc. Ces données seront collectées, nettoyées pour ensuite être stockées dans plusieurs bases de données SQLite pour une utilisation ultérieure.
+The objective of this project is to collect data on movies and TV shows from the IMDb website using scraping techniques with Python. The collected information may include titles, ratings, main actors, genres, release years, etc. This data will be gathered, cleaned, and then stored in multiple SQLite databases for future use.
 
-## Technologies utilisées
+## Technologies Used
 
 - Python
 - Scrapy
 - SQLite
 
-## Structure du Projet
+## Project Structure
 
-- `data`: Le dossier contenant les données scrappées sauvegardées sous format CSV ainsi que la base de donnée et un notebook de requêtes SQL.
-- `scraping`: Dossier principal contenant les spiders qui ont permis de scrapper les données, les pipelines qui ont permis de les nettoyer, etc.
+- `data`: The folder containing scraped data saved in CSV format, along with the database and an SQL query notebook.
+- `scraping`: Main folder containing the spiders used for scraping the data, pipelines used for cleaning them, etc.
