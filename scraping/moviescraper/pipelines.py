@@ -250,12 +250,12 @@ class SeriescraperPipeline:
                              url TEXT,
                              title TEXT,
                              years TEXT,
-                             nb_seasons TEXT,
-                             nb_episodes TEXT,
-                             episode_length TEXT,
+                             nb_seasons INTEGER,
+                             nb_episodes INTEGER,
+                             episode_length INTEGER,
                              synopsis TEXT,
-                             mark TEXT,
-                             marks_nb TEXT
+                             mark REAL,
+                             marks_nb INTEGER
                          )
                          """)
         
