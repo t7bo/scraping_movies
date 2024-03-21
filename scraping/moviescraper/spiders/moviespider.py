@@ -18,7 +18,7 @@ class MoviespiderSpider(scrapy.Spider):
         for movie in movies:
             relative_url = movie.css('div.ipc-title a.ipc-title-link-wrapper::attr(href)').get()
             movie_url = 'https://www.imdb.com' + relative_url
-            yield response.follow(movie_url, callback=self.parsemoviepage)
+            yield response.follow(movie_url, callback=self.parsemoviepage) # callback = quelle fonction il va executer ensuite
 
     @logger.catch
     def parsemoviepage(self, response):

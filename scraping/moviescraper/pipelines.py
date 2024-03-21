@@ -66,7 +66,7 @@ class MoviescraperPipeline:
             elif field_name == 'original_title':
                 original_title = adapter.get('original_title')
                 if original_title is not None:
-                    original_title = title_each_word_of_str(original_title[17:])
+                    original_title = title_each_word_of_str(original_title[16:])
                 adapter['original_title'] = original_title
 
             # ERASE STR AND CONVERT TO INT
