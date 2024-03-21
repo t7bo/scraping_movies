@@ -205,6 +205,71 @@ class MoviescraperPipeline:
 
         return item
     
+
+class CountriesPipeline:
+    def __init__(self) -> None:
+        self.con = sqlite3.connect('../data/database/imdb.db')
+        self.cur = self.con.cursor()
+        self.cur.execute("""
+                        CREATE TABLE IF NOT EXISTS countries(
+                         country TEXT UNIQUE
+                        )""")
+        
+
+    def process_item(self, item, spider):
+        countries = {
+            'France',
+            'United States',
+            'Poland',
+            'Germany',
+            'United Kingdom',
+            'South Korea',
+            'Italy',
+            'Brazil',
+            'Germany',
+            'Japan',
+            'India',
+            'Mexico',
+            'Algeria',
+            'Turkey',
+            'Malta',
+            'Morocco',
+            'South Africa',
+            'Ireland',
+            'Sweden',
+            'Canada',
+            'Australia',
+            'Argentina',
+            'Spain',
+            'Austria',
+            'Iran',
+            'China',
+            'West Germany',
+            'Denmark',
+            'Soviet Union',
+            'Norway',
+            'Hong Kong',
+            'New Zealand',
+            'United Arab Emirates',
+            'Hungary',
+            'Jordan',
+            'Gambia',
+            'Lebanon',
+            'Cyprus',
+            'Qatar',
+            'Czech Republic'
+        }
+
+        for country in countries:
+            self.cur.execute("""
+                            INSERT OR IGNORE INTO countries (country) VALUES (?)
+                             """,
+                             (country,))
+            
+        self.con.commit()
+        return item
+
+    
 class CategoriesPipeline:
     def __init__(self) -> None:
         self.con = sqlite3.connect('../data/database/imdb.db')

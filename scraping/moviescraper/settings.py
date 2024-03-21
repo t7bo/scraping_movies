@@ -73,7 +73,8 @@ DOWNLOADER_MIDDLEWARES = {
 ITEM_PIPELINES = {
    "moviescraper.pipelines.MoviescraperPipeline": 100,
    "moviescraper.pipelines.CategoriesPipeline": 200,
-   "moviescraper.pipelines.SeriescraperPipeline": 300,
+   "moviescraper.pipelines.CountriesPipeline": 300,
+   "moviescraper.pipelines.SeriescraperPipeline": 400,
 }
 
 # Enable and configure the AutoThrottle extension (disabled by default)
